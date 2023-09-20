@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <multiply/multiply.h>
+#include <multiply.h>
 
 TEST(MultiplyTests, TestIntegerOne_One)
 {

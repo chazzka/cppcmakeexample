@@ -1,23 +1,42 @@
 include(FetchContent)
 
-# Remove unnecessary build files
-# and steps from GTest's CMake
-option(BUILD_GMOCK OFF)
-option(INSTALL_GTEST OFF)
 FetchContent_Declare(
   googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        release-1.11.0
+  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
 )
+
 FetchContent_MakeAvailable(googletest)
-add_library(GTest::GTest INTERFACE IMPORTED)
-target_link_libraries(GTest::GTest INTERFACE gtest_main)
 
-add_executable(multiply_test multiply_test.cpp)
 
-target_link_libraries(multiply_test
- PRIVATE
-  GTest::GTest
-  multiply)
+add_executable(
+  multiply_test 
+  multiply_test.cpp
+)
 
-add_test(multiply_gtests multiply_test)
+# "multiply" is a add_library name from src/multiply/CMakeLists.txt
+target_link_libraries(
+  multiply_test
+  PRIVATE
+  GTest::gtest_main
+  multiply
+)
+
+
+add_executable(
+  add_test 
+  add_test.cpp
+)
+
+# "add" is a add_library name from src/add/CMakeLists.txt
+target_link_libraries(
+  add_test
+  PRIVATE
+  GTest::gtest_main
+  add
+)
+
+include(GoogleTest)
+gtest_discover_tests(add_test)
+gtest_discover_tests(multiply_test)
+
+
